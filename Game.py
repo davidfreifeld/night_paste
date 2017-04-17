@@ -24,20 +24,24 @@ class Game:
         return self.words
 
     def print_words(self):
-        for i in range(5):
-            row = ''
-            for j in range(5):
-                row += '\t\t' + self.words[i*5 + j]
-            print(row + '\n')
+	self.print_array(self.words)
 
     def get_key(self):
 	return self.key
 
     def print_key(self):
-        for i in range(5):
+	self.print_array(self.key)
+
+    def print_array(self, my_array):
+	for i in range(5):
             row = ''
             for j in range(5):
-                row += '\t\t' + self.key[i*5 + j]
+                row += '\t\t' + my_array[i*5 + j]
             print(row + '\n')
 
-
+if __name__ == "__main__":
+    my_game = Game()
+    print("Game words:")
+    my_game.print_words()
+    print("Game key:")
+    my_game.print_key()
