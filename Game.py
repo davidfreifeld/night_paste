@@ -21,6 +21,8 @@ class Game:
 	self.current_clue_word  = None
 	self.current_clue_number = None
 
+	self.max_str_len = max(max([len(k) for k in self.key]), max([len(w) for w in self.words]))
+
     def init_words(self):
         self.words = ['tree', 'apple', 'circus', 'pig', 'face', 'mug', 'wind', 'stick', 'basket', 'picnic', 'string',
                       'cloud', 'mouth', 'candy', 'fridge', 'table', 'iron', 'spoon', 'blender', 'math', 'napkin',
@@ -66,10 +68,11 @@ class Game:
 	self.print_array(self.board)
 
     def print_array(self, my_array):
+	format_string = "{0:" + str(self.max_str_len + 4) + "}"
 	for i in range(5):
             row = ''
             for j in range(5):
-                row += '\t\t' + my_array[i*5 + j]
+                row += format_string.format(my_array[i*5 + j])
             print(row + '\n')
 
     def give_clue(self, clue_word, clue_number):
