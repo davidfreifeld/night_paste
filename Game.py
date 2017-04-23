@@ -40,7 +40,7 @@ class Game:
 
     def init_board(self):
 	self.board = list(self.words)
-
+	
 
     ######################################
     ## Print/Return Info About the Game ##
@@ -105,16 +105,22 @@ class Game:
 	return True
 
 
-    def guess_word(self, board_index):
+    def guess_word(self, guess):
 
 	if self.current_clue_word is None or self.current_clue_number is None:
 	    print "No clue has been given yet!"
 	    return False
 
+	if guess not in self.board:
+	    print guess + " is not a word on the current board!"
+	    return False
+
+	board_index = self.board.index(guess)
+
 	player_color = self.get_current_player()
 	guess_color = self.key[board_index]
-
-	if guess_color == 'assassin':
+	
+	if guess_color == 'ASSASSIN':
 	    print player_color + " player guessed the Assassin! The game is over."
 	    sys.exit(0)
 
