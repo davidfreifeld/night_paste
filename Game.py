@@ -6,8 +6,12 @@ import sys
 
 class Game:
 
-    key_set = np.concatenate((np.repeat('blue', 9), np.repeat('red', 8), np.repeat('neutral', 7), ['assassin']))
-    player_set = ['blue', 'red']
+    ##########################
+    ##  Initialize the Game ##
+    ##########################
+ 
+    key_set = np.concatenate((np.repeat('BLUE', 9), np.repeat('RED', 8), np.repeat('NEUTRAL', 7), ['ASSASSIN']))
+    player_set = ['BLUE', 'RED']
 
     def __init__(self):
 	
@@ -37,6 +41,11 @@ class Game:
     def init_board(self):
 	self.board = list(self.words)
 
+
+    ######################################
+    ## Print/Return Info About the Game ##
+    ######################################
+
     def get_words(self):
         return self.words
 
@@ -59,6 +68,8 @@ class Game:
 	return self.current_clue_number
 
     def get_current_guesses_remaining(self):
+	if self.current_clue_number is None:
+	    return None
 	return self.current_clue_number + 1 - self.current_guess_number
 
     def print_current_clue(self):
@@ -74,29 +85,67 @@ class Game:
             for j in range(5):
                 row += format_string.format(my_array[i*5 + j])
             print(row + '\n')
+    
+    def get_current_player(self):
+	return Game.player_set[self.current_player_turn]
+
+    #####################
+    ## Act on the game ##
+    #####################
+
 
     def give_clue(self, clue_word, clue_number):
+	
+	if self.current_clue_word is not None or self.current_clue_number is not None:
+	    print self.get_current_player() + " player is not finished guessing!"
+	    return False
+
 	self.current_clue_word = clue_word
 	self.current_clue_number = clue_number
+	return True
+
 
     def guess_word(self, board_index):
 
-	player_color = Game.player_set[self.current_player_turn]
+	if self.current_clue_word is None or self.current_clue_number is None:
+	    print "No clue has been given yet!"
+	    return False
+
+	player_color = self.get_current_player()
 	guess_color = self.key[board_index]
 
 	if guess_color == 'assassin':
-	    print(player_color + " player guessed the Assassin! The game is over.")
+	    print player_color + " player guessed the Assassin! The game is over."
 	    sys.exit(0)
 
 	self.board[board_index] = guess_color 
+	self.current_guess_number = self.current_guess_number + 1
 
 	if player_color == guess_color:
-	    self.current_guess_number = self.current_guess_number + 1
-	    return self.get_current_guesses_remaining() > 0
+	    if self.get_current_guesses_remaining() == 0:
+		self.end_turn()
+
 	else:
-	    self.current_guess_number = self.current_clue_number + 1
-	    return False
+	    self.end_turn()
+
+	return True
+
+
+    def end_turn(self):
 	
+	if self.current_clue_word is None or self.current_clue_number is None:
+	    print self.get_current_player() + " player has not given a clue yet!"
+	    return False
+
+	if self.current_guess_number == 0:
+	    print self.get_current_player() + " player must guess at least one word!"
+	    return False	
+
+	self.current_clue_word = None
+	self.current_clue_number = None
+	self.current_player_turn = (self.current_player_turn + 1) % 2
+	self.current_guess_number = 0
+
 
 if __name__ == "__main__":
     my_game = Game()
@@ -114,6 +163,6 @@ if __name__ == "__main__":
     my_game.guess_word(4)
     my_game.print_board()
     guesses_remaining = my_game.get_current_guesses_remaining()
-    print("Blue player has " + str(guesses_remaining) + " guesses remaining.")
+    print(str(guesses_remaining) + " guesses remaining.")
 
 
