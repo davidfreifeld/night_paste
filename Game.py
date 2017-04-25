@@ -89,6 +89,13 @@ class Game:
     def get_current_player(self):
 	return Game.player_set[self.current_player_turn]
 
+    def print_status(self):
+	current_player = self.get_current_player()
+	if self.current_clue_word is None and self.current_clue_number is None:
+	    print current_player + "'s turn to give a clue."
+	else: 
+	    print current_player + "'s turn to guess."
+
     #####################
     ## Act on the game ##
     #####################
