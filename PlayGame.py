@@ -8,6 +8,7 @@ class PlayGame(cmd.Cmd):
     game = Game.Game()
 
     def preloop(self):
+	self.game.print_board()
 	self.do_status('')
 
     def postcmd(self, stop, line):

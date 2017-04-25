@@ -3,6 +3,7 @@
 
 import numpy as np
 import sys
+from nltk.corpus import words
 
 class Game:
 
@@ -28,9 +29,10 @@ class Game:
 	self.max_str_len = max(max([len(k) for k in self.key]), max([len(w) for w in self.words]))
 
     def init_words(self):
-        self.words = ['tree', 'apple', 'circus', 'pig', 'face', 'mug', 'wind', 'stick', 'basket', 'picnic', 'string',
-                      'cloud', 'mouth', 'candy', 'fridge', 'table', 'iron', 'spoon', 'blender', 'math', 'napkin',
-                      'paper', 'rocket', 'smell', 'orange']
+        # self.words = ['tree', 'apple', 'circus', 'pig', 'face', 'mug', 'wind', 'stick', 'basket', 'picnic', 'string',
+        #               'cloud', 'mouth', 'candy', 'fridge', 'table', 'iron', 'spoon', 'blender', 'math', 'napkin',
+        #               'paper', 'rocket', 'smell', 'orange']
+	self.words = np.random.choice(words.words(), 25, False)
 
     def init_key(self):
 	self.key = np.random.choice(Game.key_set, 25, False)
@@ -91,10 +93,13 @@ class Game:
 
     def print_status(self):
 	current_player = self.get_current_player()
+	print ""
 	if self.current_clue_word is None and self.current_clue_number is None:
 	    print current_player + "'s turn to give a clue."
 	else: 
 	    print current_player + "'s turn to guess."
+	    print "Clue: " + self.current_clue_word + " " + str(self.current_clue_number)
+	    print str(self.get_current_guesses_remaining()) + " guesses remaining."
 
     #####################
     ## Act on the game ##
