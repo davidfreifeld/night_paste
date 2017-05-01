@@ -26,6 +26,10 @@ class Game:
 	self.current_clue_word  = None
 	self.current_clue_number = None
 
+	self.scores = {}
+	self.scores['BLUE'] = 0
+	self.scores['RED'] = 0
+
 	self.max_str_len = max(max([len(k) for k in self.key]), max([len(w) for w in self.words]))
 
     def init_words(self):
@@ -100,6 +104,8 @@ class Game:
 	    print current_player + "'s turn to guess."
 	    print "Clue: " + self.current_clue_word + " " + str(self.current_clue_number)
 	    print str(self.get_current_guesses_remaining()) + " guesses remaining."
+	print "Score: BLUE-" + str(self.scores['BLUE']) + "; RED-" + str(self.scores['RED'])
+	
 
     #####################
     ## Act on the game ##
@@ -139,10 +145,12 @@ class Game:
 	self.board[board_index] = guess_color 
 	self.current_guess_number = self.current_guess_number + 1
 
+	if guess_color != 'NEUTRAL':
+	    self.scores[guess_color] = self.scores[guess_color] + 1
+
 	if player_color == guess_color:
 	    if self.get_current_guesses_remaining() == 0:
 		self.end_turn()
-
 	else:
 	    self.end_turn()
 
