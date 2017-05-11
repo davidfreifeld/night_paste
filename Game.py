@@ -3,7 +3,9 @@
 
 import numpy as np
 import sys
+import nltk
 from nltk.corpus import words
+from nltk.corpus import brown
 
 class Game:
 
@@ -36,7 +38,16 @@ class Game:
         # self.words = ['tree', 'apple', 'circus', 'pig', 'face', 'mug', 'wind', 'stick', 'basket', 'picnic', 'string',
         #               'cloud', 'mouth', 'candy', 'fridge', 'table', 'iron', 'spoon', 'blender', 'math', 'napkin',
         #               'paper', 'rocket', 'smell', 'orange']
-	self.words = np.random.choice(words.words(), 25, False)
+
+	# self.words = np.random.choice(words.words(), 25, False)
+
+	freqs = nltk.ConditionalFreqDist((tag, wrd.lower()) for wrd, tag in 
+        	brown.tagged_words(tagset="universal"))
+
+	sorted_tuples = sorted(freqs["NOUN"].iteritems(), key=lambda (k,v): (v, k), reverse=True)[0:300]
+	sorted_nouns = [t[0] for t in sorted_tuples]
+
+	self.words = np.random.choice(sorted_nouns, 25, False)
 
     def init_key(self):
 	self.key = np.random.choice(Game.key_set, 25, False)
